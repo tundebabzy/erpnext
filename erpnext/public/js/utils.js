@@ -108,6 +108,7 @@ $.extend(erpnext.utils, {
 });
 
 erpnext.utils.map_current_doc = function(opts) {
+    console.log("callee map_current_doc");
 	if(opts.get_query_filters) {
 		opts.get_query = function() {
 			return {filters: opts.get_query_filters};
@@ -178,8 +179,10 @@ erpnext.utils.map_current_doc = function(opts) {
 				"target_doc": cur_frm.doc,
 			},
 			callback: function(r) {
+			    console.log("222 reached");
 				if(!r.exc) {
 					var doc = frappe.model.sync(r.message);
+					cur_frm.dirty();
 					cur_frm.refresh();
 				}
 			}
