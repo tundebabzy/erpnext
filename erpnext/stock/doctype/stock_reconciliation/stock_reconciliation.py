@@ -152,7 +152,7 @@ class StockReconciliation(StockController):
 			# docstatus should be < 2
 			validate_cancelled_item(item_code, item.docstatus, verbose=0)
 
-		except Exception, e:
+		except Exception as e:
 			self.validation_messages.append(_("Row # ") + ("%d: " % (row_num)) + cstr(e))
 
 	def update_stock_ledger(self):
