@@ -170,6 +170,9 @@ class calculate_taxes_and_totals(object):
 		self.doc.round_floats_in(self.doc, ["total", "base_total", "net_total", "base_net_total"])
 
 	def calculate_taxes(self):
+		# keep track of totals without rounding
+		#difference = raw_current_tax_amount_acc = 0.0
+
 		# maintain actual tax rate based on idx
 		actual_tax_dict = dict([[tax.idx, flt(tax.tax_amount, tax.precision("tax_amount"))]
 			for tax in self.doc.get("taxes") if tax.charge_type == "Actual"])
@@ -180,6 +183,7 @@ class calculate_taxes_and_totals(object):
 			for i, tax in enumerate(self.doc.get("taxes")):
 				# tax_amount represents the amount of tax for the current step
 				current_tax_amount = self.get_current_tax_amount(item, tax, item_tax_map)
+				raw_current_tax_amount = self.get_current_tax_amount(item, tax, item_tax_map, no_precision=True)
 
 				# Adjust divisional loss to the last item
 				if tax.charge_type == "Actual":
@@ -230,7 +234,7 @@ class calculate_taxes_and_totals(object):
 
 
 
-	def get_current_tax_amount(self, item, tax, item_tax_map):
+	def get_current_tax_amount(self, item, tax, item_tax_map, no_precision=False):
 		tax_rate = self._get_tax_rate(tax, item_tax_map)
 		current_tax_amount = 0.0
 
@@ -248,7 +252,7 @@ class calculate_taxes_and_totals(object):
 			current_tax_amount = (tax_rate / 100.0) * \
 				self.doc.get("taxes")[cint(tax.row_id) - 1].grand_total_for_current_item
 
-		current_tax_amount = flt(current_tax_amount, tax.precision("tax_amount"))
+		current_tax_amount = flt(current_tax_amount, tax.precision("tax_amount") if not no_precision else None)
 
 		self.set_item_wise_tax(item, tax, tax_rate, current_tax_amount)
 
