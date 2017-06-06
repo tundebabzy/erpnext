@@ -171,7 +171,7 @@ class calculate_taxes_and_totals(object):
 
 	def calculate_taxes(self):
 		# keep track of totals without rounding
-		#difference = raw_current_tax_amount_acc = 0.0
+		current_tax_amount_acc = raw_current_tax_amount_acc = 0.0
 
 		# maintain actual tax rate based on idx
 		actual_tax_dict = dict([[tax.idx, flt(tax.tax_amount, tax.precision("tax_amount"))]
@@ -183,13 +183,20 @@ class calculate_taxes_and_totals(object):
 			for i, tax in enumerate(self.doc.get("taxes")):
 				# tax_amount represents the amount of tax for the current step
 				current_tax_amount = self.get_current_tax_amount(item, tax, item_tax_map)
-				raw_current_tax_amount = self.get_current_tax_amount(item, tax, item_tax_map, no_precision=True)
+
+				current_tax_amount_acc += current_tax_amount
+				raw_current_tax_amount_acc += self.get_current_tax_amount(item, tax, item_tax_map, no_precision=True)
 
 				# Adjust divisional loss to the last item
 				if tax.charge_type == "Actual":
 					actual_tax_dict[tax.idx] -= current_tax_amount
 					if n == len(self.doc.get("items")) - 1:
 						current_tax_amount += actual_tax_dict[tax.idx]
+
+				if n == len(self.doc.get("items")) - 1:
+					difference = flt(current_tax_amount_acc - raw_current_tax_amount_acc, tax.precision("tax_amount"))
+					if difference != 0:
+						current_tax_amount -= difference
 
 				# accumulate tax amount into tax.tax_amount
 				if tax.charge_type != "Actual" and \
