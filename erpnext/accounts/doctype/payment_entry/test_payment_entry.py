@@ -5,15 +5,24 @@ from __future__ import unicode_literals
 
 import frappe
 import unittest
+
+from erpnext.setup.utils import get_exchange_rate
 from frappe.utils import flt, nowdate
 from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
 from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry, InvalidPaymentEntry
 from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
 from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
 
-test_dependencies = ["Item"]
+test_dependencies = ["Item", "Currency Exchange"]
+exchange_rates = frappe.get_test_records("Currency Exchange")
+
 
 class TestPaymentEntry(unittest.TestCase):
+	def test_get_exchange_rate(self):
+		self.assertEqual(get_exchange_rate('USD', 'INR', '2016-01-01'), 60.0)
+		self.assertEqual(get_exchange_rate('USD', 'INR', '2016-01-10'), 65.1)
+		self.assertEqual(get_exchange_rate('USD', 'INR', '2016-01-30'), 62.9)
+
 	def test_payment_entry_against_order(self):
 		so = make_sales_order()
 		pe = get_payment_entry("Sales Order", so.name, bank_account="_Test Cash - _TC")
