@@ -375,7 +375,7 @@ frappe.ui.form.on('Payment Entry', {
 	},
 	
 	posting_date: function(frm) {
-		frm.events.paid_from_account_currency(frm);
+		frm.trigger(paid_from_account_currency(frm));
 	},
 
 	source_exchange_rate: function(frm) {
