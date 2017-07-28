@@ -343,7 +343,8 @@ class BuyingController(StockController):
 				if pr_qty:
 					sle = self.get_sl_entries(d, {
 						"actual_qty": flt(pr_qty),
-						"serial_no": cstr(d.serial_no).strip()
+						"serial_no": cstr(d.serial_no).strip(),
+						"exchange_rate": self.conversion_rate
 					})
 					if self.is_return:
 						original_incoming_rate = frappe.db.get_value("Stock Ledger Entry",
