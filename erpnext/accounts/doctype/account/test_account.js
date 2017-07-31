@@ -25,3 +25,21 @@ QUnit.test("test account", function(assert) {
 		() => done()
 	]);
 });
+
+QUnit.test("test bank charges account type", function(assert) {
+	assert.expect(1);
+	let done = assert.async();
+	frappe.run_serially([
+		() => frappe.set_route('Tree', 'Account'),
+		() => frappe.click_button('Expand All'),
+		() => frappe.click_link('Indirect Expenses'),
+		() => frappe.click_button('Add Child'),
+		() => cur_dialog.set_value('account_name', 'Account Name'),
+		() => {
+			assert.ok($.inArray('Bank Charges', $.map($("select[data-fieldname='account_type']"), $.text)));
+		},
+		() => cur_dialog.set_value('account_type', 'Bank Charges'),
+		() => frappe.click_button('Create New'),
+		() => done()
+	]);
+});
