@@ -92,7 +92,9 @@ def get():
 			},
 			_("Indirect Expenses"): {
 				_("Administrative Expenses"): {},
-				_("Bank Charges"): {},
+				_("Bank Charges"): {
+					"account_type": "Bank Charges"
+				},
 				_("Commission on Sales"): {},
 				_("Depreciation"): {
 					"account_type": "Depreciation"
