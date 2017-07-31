@@ -36,6 +36,7 @@ def _make_test_records(verbose):
 		["_Test Account Discount", "Direct Expenses", 0, None, None],
 		["_Test Write Off", "Indirect Expenses", 0, None, None],
 		["_Test Exchange Gain/Loss", "Indirect Expenses", 0, None, None],
+		["_Test Bank Charges", "Indirect Expenses", 0, "Bank Charges", None],
 
 		# related to Account Inventory Integration
 		["_Test Account Stock In Hand", "Current Assets", 0, None, None],
@@ -77,11 +78,11 @@ def get_inventory_account(company, warehouse=None):
 
 def create_account(**kwargs):
 	account = frappe.get_doc(dict(
-		doctype = "Account",
-		account_name = kwargs.get('account_name'),
-		account_type = kwargs.get('account_type'),
-		parent_account = kwargs.get('parent_account'),
-		company = kwargs.get('company')
+		doctype="Account",
+		account_name=kwargs.get('account_name'),
+		account_type=kwargs.get('account_type'),
+		parent_account=kwargs.get('parent_account'),
+		company=kwargs.get('company')
 	))
 	
 	account.save()
