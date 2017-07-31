@@ -47,19 +47,19 @@ def get():
 				_("Electronic Equipments"): {
 					"account_type": "Fixed Asset"
 				},
-				_("Furnitures and Fixtures"): {
+				_("Furniture and Fixtures"): {
 					"account_type": "Fixed Asset"
 				},
 				_("Office Equipments"): {
 					"account_type": "Fixed Asset"
 				},
-				_("Plants and Machineries"): {
+				_("Plants and Machinery"): {
 					"account_type": "Fixed Asset"
 				},
 				_("Buildings"): {
 					"account_type": "Fixed Asset"
 				},
-				_("Softwares"): {
+				_("Software"): {
 					"account_type": "Fixed Asset"
 				},
 				_("Accumulated Depreciation"): {
