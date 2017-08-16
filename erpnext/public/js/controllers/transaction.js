@@ -261,7 +261,7 @@ erpnext.TransactionController = erpnext.taxes_and_totals.extend({
 		var item = frappe.get_doc(cdt, cdn);
 		var update_stock = 0, show_batch_dialog = 0;
 
-		if(['Sales Invoice', 'Purchase Invoice'].includes(this.frm.doc.doctype)) {
+		if(['Sales Invoice'].includes(this.frm.doc.doctype)) {
 			update_stock = cint(me.frm.doc.update_stock);
 			show_batch_dialog = update_stock;
 
@@ -1100,6 +1100,46 @@ erpnext.TransactionController = erpnext.taxes_and_totals.extend({
 			}
 		}
 	},
+
+	payment_terms_template: function() {
+		var me = this;
+		if(this.frm.doc.payment_terms_template) {
+			frappe.call({
+				method: "erpnext.controllers.accounts_controller.get_payment_terms",
+				args: {
+					terms_template: this.frm.doc.payment_terms_template,
+					posting_date: this.frm.doc.posting_date || this.frm.doc.transaction_date,
+					grand_total: this.frm.doc.grand_total
+				},
+				callback: function(r) {
+					if(r.message && !r.exc) {
+						me.frm.set_value("payment_schedule", r.message);
+					}
+				}
+			})
+		}
+	},
+
+	payment_term: function(doc, cdt, cdn) {
+		var row = locals[cdt][cdn];
+		if(row.payment_term) {
+			frappe.call({
+				method: "erpnext.controllers.accounts_controller.get_payment_term_details",
+				args: {
+					term: row.payment_term,
+					posting_date: this.frm.doc.posting_date || this.frm.doc.transaction_date,
+					grand_total: this.frm.doc.grand_total
+				},
+				callback: function(r) {
+					if(r.message && !r.exc) {
+						for (var d in r.message) {
+							frappe.model.set_value(cdt, cdn, d, r.message[d]);
+						}
+					}
+				}
+			})
+		}
+	}
 });
 
 erpnext.show_serial_batch_selector = function(frm, d) {
