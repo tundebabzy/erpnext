@@ -1323,7 +1323,7 @@ class TestSalesInvoice(unittest.TestCase):
 		return si
 	
 	def test_gl_entry_based_on_payment_schedule(self):
-		si = create_sales_invoice(do_not_save=True)
+		si = create_sales_invoice(do_not_save=True, customer="_Test Customer P")
 		si.append("payment_schedule", {
 			"due_date": add_days(nowdate(), 15),
 			"payment_amount": 20
@@ -1352,7 +1352,7 @@ class TestSalesInvoice(unittest.TestCase):
 			self.assertEquals(expected_gl_entries[i][1], gle.debit)
 			self.assertEquals(expected_gl_entries[i][2], gle.credit)
 			self.assertEquals(getdate(expected_gl_entries[i][3]), getdate(gle.due_date))
-		
+
 
 	def test_company_monthly_sales(self):
 		existing_current_month_sales = frappe.db.get_value("Company", "_Test Company", "total_monthly_sales")
