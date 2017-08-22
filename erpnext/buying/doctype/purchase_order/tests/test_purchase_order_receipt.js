@@ -35,12 +35,12 @@ QUnit.test("test: purchase order receipt", function(assert) {
 
 		},
 
-		() => frappe.timeout(1),
+		() => frappe.timeout(2),
 
 		() => frappe.tests.click_button('Submit'),
 		() => frappe.tests.click_button('Yes'),
 
-		() => frappe.timeout(1.5),
+		() => frappe.timeout(2),
 		() => frappe.click_button('Close'),
 		() => frappe.timeout(0.3),
 
@@ -51,13 +51,12 @@ QUnit.test("test: purchase order receipt", function(assert) {
 		() => frappe.click_link('Receipt'),
 		() => frappe.timeout(2),
 
-		() => cur_frm.save(),
-
 		// Save and submit Purchase Receipt
-		() => frappe.timeout(1),
+		() => frappe.tests.click_button('Save'),
+		() => frappe.timeout(2),
 		() => frappe.tests.click_button('Submit'),
 		() => frappe.tests.click_button('Yes'),
-		() => frappe.timeout(1),
+		() => frappe.timeout(2),
 
 		// View Purchase order in Stock Ledger
 		() => frappe.click_button('View'),
@@ -65,10 +64,15 @@ QUnit.test("test: purchase order receipt", function(assert) {
 
 		() => frappe.click_link('Stock Ledger'),
 		() => frappe.timeout(2),
+		() => frappe.tests.click_button('Refresh'),
+		() => frappe.timeout(2),
 		() => {
-			assert.ok($('div.slick-cell.l2.r2 > a').text().includes('Test Product 1')
+			assert.ok(
+				$('div.slick-cell.l2.r2 > a').text().includes('Test Product 1')
 				&& $('div.slick-cell.l9.r9 > div').text().includes(5)
-				&& $('div.slick-cell.l12.r12 > div').text().includes(433.29), "Stock ledger entry correct",$('div.slick-cell.l12.r12 > div').text());
+				&& $('div.slick-cell.l12.r12 > div').text().includes(433.29),
+				"Stock ledger entry correct - " + $('div.slick-cell.l12.r12 > div').text()
+			);
 		},
 
 		() => done()
