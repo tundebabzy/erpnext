@@ -14,8 +14,8 @@ QUnit.test("test: purchase order receipt", function(assert) {
 				{items: [
 					[
 						{"item_code": 'Test Product 1'},
-						{"schedule_date": frappe.datetime.add_days(frappe.datetime.now_date(), 1)},
-						{"expected_delivery_date": frappe.datetime.add_days(frappe.datetime.now_date(), 5)},
+						{"schedule_date": "2013-08-23"},
+						{"expected_delivery_date": "2013-08-27"},
 						{"qty": 5},
 						{"uom": 'Unit'},
 						{"rate": 100},
@@ -70,7 +70,7 @@ QUnit.test("test: purchase order receipt", function(assert) {
 			assert.ok(
 				$('div.slick-cell.l2.r2 > a').text().includes('Test Product 1')
 				&& $('div.slick-cell.l9.r9 > div').text().includes(5)
-				&& $('div.slick-cell.l12.r12 > div').text().includes(433.29),
+				&& $('div.slick-cell.l12.r12 > div').text().includes(433.28),
 				"Stock ledger entry correct - " + $('div.slick-cell.l12.r12 > div').text()
 			);
 		},
