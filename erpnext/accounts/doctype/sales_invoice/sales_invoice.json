@@ -4340,7 +4340,7 @@
    "allow_on_submit": 0, 
    "bold": 0, 
    "collapsible": 0,
-   "columns": 0, 
+   "columns": 0,
    "fieldname": "subscription_section", 
    "fieldtype": "Section Break",
    "hidden": 0, 
@@ -4536,7 +4536,7 @@
  "module": "Accounts",
  "name": "Sales Invoice",
  "name_case": "Title Case",
- "owner": "Administrator", 
+ "owner": "Administrator",
  "permissions": [
   {
    "amend": 1, 
