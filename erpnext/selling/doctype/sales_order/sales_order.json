@@ -2410,7 +2410,7 @@
    "in_standard_filter": 0, 
    "label": "Payment Schedule", 
    "length": 0, 
-   "no_copy": 1, 
+   "no_copy": 0, 
    "options": "Payment Schedule", 
    "permlevel": 0, 
    "precision": "", 
@@ -3337,7 +3337,7 @@
   {
    "allow_bulk_edit": 0, 
    "allow_on_submit": 1,
-   "bold": 0, 
+   "bold": 0,
    "collapsible": 0, 
    "columns": 0, 
    "fieldname": "subscription_section",
@@ -3498,10 +3498,10 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-10-30 12:58:28.115742",
+ "modified": "2017-10-30 12:59:28.115742",
  "modified_by": "Administrator",
  "module": "Selling",
- "name": "Sales Order", 
+ "name": "Sales Order",
  "owner": "Administrator", 
  "permissions": [
   {
