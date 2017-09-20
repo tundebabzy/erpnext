@@ -17,7 +17,8 @@
 		"debit_to": "_Test Receivable - _TC",
 		"against_income_account": "Sales - _TC",
 		"cost_center": "_Test Cost Center - _TC",
-		"company": "_Test Company"
+		"company": "_Test Company",
+		"receivable_account": "_Test Receivable - _TC"
 	},
 	{
 		"doctype": "Fee Structure",
@@ -37,6 +38,7 @@
 		"debit_to": "_Test Receivable - _TC",
 		"against_income_account": "Sales - _TC",
 		"cost_center": "_Test Cost Center - _TC",
-		"company": "_Test Company"
+		"company": "_Test Company",
+		"receivable_account": "_Test Receivable - _TC"
 	}
 ]
