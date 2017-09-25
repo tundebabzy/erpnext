@@ -549,7 +549,7 @@ class TestSalesOrder(unittest.TestCase):
 		self.assertFalse(si.get('payment_schedule'))
 
 	def test_terms_copied(self):
-		so = make_sales_order(do_not_copy=1)
+		so = make_sales_order(do_not_copy=1, do_not_save=1)
 		so.payment_terms_template = '_Test Payment Term Template'
 		so.insert()
 		self.assertTrue(so.get('payment_schedule'))
