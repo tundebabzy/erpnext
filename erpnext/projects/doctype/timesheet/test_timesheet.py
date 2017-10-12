@@ -8,9 +8,10 @@ import unittest
 import datetime
 from frappe.utils.make_random import get_random
 from frappe.utils import now_datetime, nowdate, add_days, add_months
-from erpnext.projects.doctype.timesheet.timesheet import OverlapError
 from erpnext.projects.doctype.timesheet.timesheet import make_salary_slip, make_sales_invoice
 from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from erpnext.exceptions import OverlapError
+
 
 class TestTimesheet(unittest.TestCase):
 	def test_timesheet_billing_amount(self):
