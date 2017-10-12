@@ -8,16 +8,17 @@ from frappe import _
 
 import json
 from datetime import timedelta
-from erpnext.controllers.queries import get_match_cond
-from frappe.utils import flt, time_diff_in_hours, get_datetime, getdate, cint, get_datetime_str
+from frappe.utils import flt, time_diff_in_hours, get_datetime, getdate, cint
 from frappe.model.document import Document
 from frappe.model.mapper import get_mapped_doc
 from erpnext.manufacturing.doctype.workstation.workstation import (check_if_within_operating_hours,
 	WorkstationHolidayError)
 from erpnext.manufacturing.doctype.manufacturing_settings.manufacturing_settings import get_mins_between_operations
+from erpnext.exceptions import OverlapError
 
-class OverlapError(frappe.ValidationError): pass
+
 class OverProductionLoggedError(frappe.ValidationError): pass
+
 
 class Timesheet(Document):
 	def onload(self):
@@ -364,6 +365,9 @@ def get_events(start, end, filters=None):
 	:param filters: Filters (JSON).
 	"""
 	filters = json.loads(filters)
+	from frappe.desk.calendar import get_event_conditions
+	from erpnext.controllers.queries import get_match_cond
+	conditions = get_event_conditions("Timesheet", filters)
 
 	conditions = get_conditions(filters)
 	return frappe.db.sql("""select `tabTimesheet Detail`.name as name, 
