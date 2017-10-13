@@ -14,6 +14,7 @@ def setup(domain):
 	setup_holiday_list()
 	setup_user()
 	setup_employee()
+	setup_user_roles()
 
 	employees = frappe.get_all('Employee',  fields=['name', 'date_of_joining'])
 
@@ -24,7 +25,6 @@ def setup(domain):
 	setup_salary_structure(employees[5:], 1)
 
 	setup_leave_allocation()
-	setup_user_roles()
 	setup_customer()
 	setup_supplier()
 	setup_warehouse()
@@ -136,6 +136,7 @@ def setup_salary_structure(employees, salary_slip_based_on_timesheet=0):
 	for e in employees:
 		ss.append('employees', {
 			'employee': e.name,
+			'from_date': "2015-01-01",
 			'base': random.random() * 10000
 		})
 
@@ -163,8 +164,8 @@ def setup_salary_structure(employees, salary_slip_based_on_timesheet=0):
 	ss.append('deductions', {
 		'salary_component': 'Income Tax',
 		"abbr":'IT',
-		'condition': 'base > 1000',
-		'amount': random.random() * 1000,
+		'condition': 'base > 10000',
+		'formula': 'base*.1',
 		"idx": 1
 	})
 
