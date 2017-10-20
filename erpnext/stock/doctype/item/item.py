@@ -447,7 +447,8 @@ class Item(WebsiteGenerator):
 
 	def cant_change(self):
 		if not self.get("__islocal"):
-			to_check = ("has_serial_no", "is_stock_item",
+			to_check = (
+				"has_serial_no", "is_stock_item", "has_variants",
 				"valuation_method", "has_batch_no", "is_fixed_asset")
 
 			vals = frappe.db.get_value("Item", self.name, to_check, as_dict=True)
@@ -473,7 +474,7 @@ class Item(WebsiteGenerator):
 
 		# For "Is Stock Item", following doctypes is important
 		# because reserved_qty, ordered_qty and requested_qty updated from these doctypes
-		if key == "is_stock_item":
+		if key in ["is_stock_item", "has_variants"]:
 			linked_doctypes += ["Sales Order Item", "Purchase Order Item", "Material Request Item"]
 
 		for doctype in linked_doctypes:
