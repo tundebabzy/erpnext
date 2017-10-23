@@ -816,3 +816,34 @@ def check_stock_uom_with_bin(item, stock_uom):
 	if not matched:
 		frappe.throw(_("Default Unit of Measure for Item {0} cannot be changed directly because you have already made some transaction(s) with another UOM. You will need to create a new Item to use a different Default UOM.").format(item))
 
+
+@frappe.whitelist()
+def is_linked_item(item_name):
+	"""
+	Checks if the `Item` with the given `item_name` is linked to another document.
+	:param item_name: name of Item
+	:return: Boolean
+	"""
+	linked_doctypes = [
+		"Delivery Note Item", "Sales Invoice Item", "Purchase Receipt Item",
+		"Purchase Invoice Item", "Stock Entry Detail", "Stock Reconciliation Item",
+		"Sales Order Item", "Purchase Order Item", "Material Request Item"
+	]
+
+	query_result = ()
+
+	for doctype in linked_doctypes:
+		query_result = frappe.db.sql(
+			'select name from `tab{0}` where `item_code`=%s and `docstatus`=1 limit 1'.format(doctype),
+			(item_name,)
+		)
+
+		if query_result:
+			return {'is_linked': True}
+
+	query_result = frappe.db.sql(
+		'select name from `tabProduction Order` where `production_item`=%s and `docstatus`=1',
+		(item_name,)
+	)
+
+	return {'is_linked': bool(len(query_result))}
