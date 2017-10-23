@@ -20,6 +20,8 @@ frappe.ui.form.on("Item", {
 		// should never check Private
 		frm.fields_dict["website_image"].df.is_private = 0;
 
+		erpnext.item.disallow_variants_if_linked(frm)
+
 	},
 
 	refresh: function(frm) {
