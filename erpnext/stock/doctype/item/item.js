@@ -163,6 +163,19 @@ frappe.ui.form.on('Item Reorder', {
 })
 
 $.extend(erpnext.item, {
+    disallow_variants_if_linked: function(frm) {
+        frappe.call({
+            method: 'erpnext.stock.doctype.item.item.is_linked_item',
+            args: {'item_name': frm.doc.name},
+            callback: function(r) {
+                if (r.message.is_linked) {
+                    frm.set_value('has_variants', 0);
+                    cur_frm.set_df_property('variants_section', 'hidden', 1);
+                }
+            }
+        });
+    },
+
 	setup_queries: function(frm) {
 		frm.fields_dict['expense_account'].get_query = function(doc) {
 			return {
