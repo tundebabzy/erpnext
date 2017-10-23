@@ -293,7 +293,6 @@ class TestItem(unittest.TestCase):
 		pro_order.cancel()
 
 
-
 def set_item_variant_settings(fields):
 	doc = frappe.get_doc('Item Variant Settings')
 	doc.set('fields', fields)
