@@ -12,6 +12,10 @@ from erpnext.controllers.item_variant import (create_variant, ItemVariantExistsE
 from frappe.model.rename_doc import rename_doc
 from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
 
+from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+
+from erpnext.manufacturing.doctype.production_order.test_production_order import make_prod_order_test_record
+
 test_ignore = ["BOM"]
 test_dependencies = ["Warehouse"]
 
@@ -263,6 +267,33 @@ class TestItem(unittest.TestCase):
 		self.assertEquals(variant.manufacturer, 'MSG1')
 		self.assertEquals(variant.manufacturer_part_no, '007')
 
+	def test_convert_stock_item_to_template(self):
+		frappe.delete_doc_if_exists('Item', '_Test Item Stock To Template')
+		item = create_item(item_code='_Test Item Stock To Template')
+		invoice = create_sales_invoice(item='_Test Item Stock To Template')
+
+		item.has_variant = 1
+
+		self.assertRaises(frappe.ValidationError, item.save)
+
+		# clean up
+		invoice.cancel()
+		invoice.delete()
+
+	def test_convert_stock_item_to_template2(self):
+		frappe.delete_doc_if_exists('Item', '_Test Item Stock To Template')
+		item = create_item(item_code='_Test Item Stock To Template')
+		pro_order = make_prod_order_test_record(production_item='_Test Item Stock To Template')
+
+		item.has_variant = 1
+
+		self.assertRaises(frappe.ValidationError, item.save)
+
+		# clean up
+		pro_order.cancel()
+
+
+
 def set_item_variant_settings(fields):
 	doc = frappe.get_doc('Item Variant Settings')
 	doc.set('fields', fields)
@@ -292,3 +323,4 @@ def create_item(item_code, is_stock_item=None):
 		item.item_group = "All Item Groups"
 		item.is_stock_item = is_stock_item or 1
 		item.save()
+		return item
