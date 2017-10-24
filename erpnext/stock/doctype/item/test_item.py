@@ -12,12 +12,10 @@ from erpnext.controllers.item_variant import (create_variant, ItemVariantExistsE
 from frappe.model.rename_doc import rename_doc
 from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
 
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-
-from erpnext.manufacturing.doctype.production_order.test_production_order import make_prod_order_test_record
 
 test_ignore = ["BOM"]
 test_dependencies = ["Warehouse"]
+
 
 def make_item(item_code, properties=None):
 	if frappe.db.exists("Item", item_code):
@@ -268,6 +266,7 @@ class TestItem(unittest.TestCase):
 		self.assertEquals(variant.manufacturer_part_no, '007')
 
 	def test_convert_stock_item_to_template(self):
+		from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
 		frappe.delete_doc_if_exists('Item', '_Test Item Stock To Template')
 		item = create_item(item_code='_Test Item Stock To Template')
 		invoice = create_sales_invoice(item='_Test Item Stock To Template')
@@ -281,11 +280,11 @@ class TestItem(unittest.TestCase):
 		invoice.delete()
 
 	def test_convert_stock_item_to_template2(self):
-		frappe.delete_doc_if_exists('Item', '_Test Item Stock To Template')
-		item = create_item(item_code='_Test Item Stock To Template')
-		pro_order = make_prod_order_test_record(production_item='_Test Item Stock To Template')
-
-		item.has_variant = 1
+		from erpnext.manufacturing.doctype.production_order.test_production_order import make_prod_order_test_record
+		pro_order = make_prod_order_test_record(item="_Test FG Item")
+		item = frappe.get_doc('Item', '_Test FG Item')
+		print('item has_variant:', item.has_variants)
+		item.has_variants = 1
 
 		self.assertRaises(frappe.ValidationError, item.save)
 
@@ -323,3 +322,27 @@ def create_item(item_code, is_stock_item=None):
 		item.is_stock_item = is_stock_item or 1
 		item.save()
 		return item
+
+
+TEST_BOM = {
+	"items": [
+		{
+			"amount": 5000.0,
+			"doctype": "BOM Item",
+			"item_code": "_Test Item Stock To Template",
+			"parentfield": "items",
+			"qty": 1.0,
+			"rate": 5000.0,
+			"uom": "_Test UOM",
+			"stock_uom": "_Test UOM",
+			"source_warehouse": "_Test Warehouse - _TC"
+		},
+	],
+	"docstatus": 1,
+	"doctype": "BOM",
+	"currency": "USD",
+	"is_active": 1,
+	"is_default": 1,
+	"item": "_Test Item Stock To Template",
+	"quantity": 1.0
+}
