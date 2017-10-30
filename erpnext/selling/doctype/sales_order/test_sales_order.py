@@ -68,12 +68,16 @@ class TestSalesOrder(unittest.TestCase):
 
 		so.save()
 		so.submit()
+		for i in so.get('payment_schedule'):
+			print(i.payment_amount)
 		si = make_sales_invoice(so.name)
 
 		self.assertEquals(len(si.get("items")), len(so.get("items")))
 		self.assertEquals(len(si.get("items")), 1)
 
 		si.insert()
+		for i in so.get('payment_schedule'):
+			print(i.payment_amount)
 
 		self.assertEqual(si.payment_schedule[0].payment_amount, 500.0)
 		self.assertEqual(si.payment_schedule[0].due_date, so.transaction_date)
