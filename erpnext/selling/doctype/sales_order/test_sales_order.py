@@ -68,6 +68,7 @@ class TestSalesOrder(unittest.TestCase):
 
 		so.save()
 		so.submit()
+		print (so.grand_total)
 		for i in so.get('payment_schedule'):
 			print(i.payment_amount)
 		si = make_sales_invoice(so.name)
@@ -76,6 +77,7 @@ class TestSalesOrder(unittest.TestCase):
 		self.assertEquals(len(si.get("items")), 1)
 
 		si.insert()
+		print (si.grand_total)
 		for i in so.get('payment_schedule'):
 			print(i.payment_amount)
 
