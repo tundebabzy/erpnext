@@ -61,13 +61,16 @@ class TestSalesOrder(unittest.TestCase):
 
 	def test_make_sales_invoice_with_terms(self):
 		so = make_sales_order(do_not_submit=True)
-
+		self.assertEqual(so.grand_total, 1000)
 		self.assertRaises(frappe.ValidationError, make_sales_invoice, so.name)
-
+		self.assertEqual(so.grand_total, 1000)
 		so.update({"payment_terms_template": "_Test Payment Term Template"})
+		self.assertEqual(so.grand_total, 1000)
 
 		so.save()
+		self.assertEqual(so.grand_total, 1000)
 		so.submit()
+		self.assertEqual(so.grand_total, 1000)
 		self.assertEqual(so.payment_schedule[0].payment_amount, 500.0)
 
 		for j in so.get('items'):
