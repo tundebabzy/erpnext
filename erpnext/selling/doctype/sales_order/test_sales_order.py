@@ -68,6 +68,8 @@ class TestSalesOrder(unittest.TestCase):
 
 		so.save()
 		so.submit()
+		self.assertEqual(so.payment_schedule[0].payment_amount, 500.0)
+
 		for j in so.get('items'):
 			print(j.rate, j.qty)
 		for i in so.get('payment_schedule'):
