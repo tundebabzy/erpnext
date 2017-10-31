@@ -72,6 +72,7 @@ class TestSalesOrder(unittest.TestCase):
 			print(j.rate, j.qty)
 		for i in so.get('payment_schedule'):
 			print(i.payment_amount)
+		print(so.grand_total)
 		si = make_sales_invoice(so.name)
 
 		self.assertEquals(len(si.get("items")), len(so.get("items")))
