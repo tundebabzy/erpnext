@@ -68,7 +68,7 @@ class TestSalesOrder(unittest.TestCase):
 
 		so.save()
 		so.submit()
-		for j in so.get('terms'):
+		for j in so.get('items'):
 			print(j.rate, j.qty)
 		for i in so.get('payment_schedule'):
 			print(i.payment_amount)
