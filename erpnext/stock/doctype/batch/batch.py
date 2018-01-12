@@ -17,7 +17,7 @@ def get_name_from_naming_series():
 	if not naming_series_prefix:
 		naming_series_prefix = 'BATCH-'
 
-	name = make_autoname(naming_series_prefix + '.#####')
+	name = make_autoname(naming_series_prefix.upper() + '.#####')
 
 	return name
 
