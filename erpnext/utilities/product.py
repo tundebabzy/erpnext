@@ -14,6 +14,7 @@ def get_qty_in_stock(item_code, item_warehouse_field):
 	template_item_code, is_stock_item = frappe.db.get_value("Item", item_code, ["variant_of", "is_stock_item"])
 
 	warehouse = frappe.db.get_value("Item", item_code, item_warehouse_field)
+
 	if not warehouse and template_item_code and template_item_code != item_code:
 		warehouse = frappe.db.get_value("Item", template_item_code, item_warehouse_field)
 
