@@ -8,12 +8,12 @@ from frappe.utils import cint, fmt_money, flt, nowdate, getdate
 from erpnext.accounts.doctype.pricing_rule.pricing_rule import get_pricing_rule_for_item
 from erpnext.stock.doctype.batch.batch import get_batch_qty
 
-def get_qty_in_stock(item_code, item_warehouse_field):
-	print('warehouse field', item_warehouse_field)
+def get_qty_in_stock(item_code, item_warehouse_field, warehouse=None):
 	in_stock, stock_qty = 0, ''
 	template_item_code, is_stock_item = frappe.db.get_value("Item", item_code, ["variant_of", "is_stock_item"])
 
-	warehouse = frappe.db.get_value("Item", item_code, item_warehouse_field)
+	if not warehouse:
+		warehouse = frappe.db.get_value("Item", item_code, item_warehouse_field)
 
 	if not warehouse and template_item_code and template_item_code != item_code:
 		warehouse = frappe.db.get_value("Item", template_item_code, item_warehouse_field)
@@ -46,7 +46,7 @@ def adjust_for_expired_items(item_code, stock_qty, warehouse):
 			else:
 				stock_qty[0][0] = max(0, stock_qty[0][0] - qty_from_all_warehouses(get_batch_qty(batch)))
 
-			if stock_qty[0][0]:
+			if not stock_qty[0][0]:
 				break
 	return stock_qty
 
@@ -55,7 +55,7 @@ def get_expired_batches(batches):
 	"""
 	:param batches: A list of dict in the form [{'expiry_date': datetime.date(20XX, 1, 1), 'name': 'batch_id'}, ...]
 	"""
-	return [b.name for b in batches if b.expiry_date <= getdate(nowdate())]
+	return [b.name for b in batches if b.expiry_date and b.expiry_date <= getdate(nowdate())]
 
 
 def qty_from_all_warehouses(batch_info):
