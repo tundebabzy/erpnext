@@ -7,9 +7,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.model.naming import make_autoname, revert_series_if_last
 from frappe.utils import flt, cint
-from frappe.utils.jinja import render_template, validate_template
+from frappe.utils.jinja import render_template
 from frappe.utils.data import add_days
-import json
 
 class UnableToSelectBatchError(frappe.ValidationError):
 	pass
@@ -170,8 +169,8 @@ class Batch(Document):
 			self.expiry_date = add_days(self.manufacturing_date, shelf_life_in_days)
 
 		if has_expiry_date and not self.expiry_date:
-			frappe.throw('Expiry date is mandatory for selected item')
-			frappe.msgprint('Set items shelf life in days, to set expiry based on manufacturing_date plus self life ')
+			frappe.throw(_('Expiry date is mandatory for selected item'))
+			frappe.msgprint(_('Set items shelf life in days, to set expiry based on manufacturing_date plus self life'))
 
 	def get_name_from_naming_series(self):
 		"""
